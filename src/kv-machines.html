@@ -116,6 +116,14 @@ html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, 'SF P
 .setup-input:focus { outline: none; border-color: var(--text); }
 .btn-setup { width: 100%; padding: 16px; background: var(--green); border: none; border-radius: 14px; font-size: 17px; font-weight: 600; color: #ffffff; cursor: pointer; font-family: inherit; }
 .btn-setup:active { opacity: 0.75; }
+.drink-product-row { background: var(--bg2); border-radius: 14px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; }
+.drink-product-name { font-size: 17px; font-weight: 600; color: var(--text); }
+.stepper { display: flex; align-items: center; gap: 8px; }
+.stepper-btn { width: 44px; height: 44px; border-radius: 50%; background: var(--bg3); border: none; font-size: 22px; color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; font-family: inherit; flex-shrink: 0; }
+.stepper-btn:active { opacity: 0.6; }
+.stepper-count { font-size: 28px; font-weight: 700; color: var(--text); min-width: 44px; text-align: center; }
+.btn-save-visit { width: 100%; padding: 16px; background: var(--green); border: none; border-radius: 14px; font-size: 17px; font-weight: 600; color: #ffffff; cursor: pointer; font-family: inherit; margin-top: 16px; padding-bottom: calc(16px + var(--safe-bottom)); }
+.btn-save-visit:active { opacity: 0.75; }
 </style>
 </head>
 <body>
@@ -146,6 +154,17 @@ html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, 'SF P
         </div>
         <div id="sync-status" class="sync-status"></div>
         <div class="machine-grid" id="machine-grid"></div>
+      </div>
+      <div class="subscreen" id="sub-drink">
+        <div class="screen-header">
+          <button class="back-btn" onclick="goBack('sub-drink','sub-machines')">
+            <svg width="14" height="24" viewBox="0 0 14 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 22L2 12L12 2" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="screen-title" id="drink-title">Machine</div>
+        </div>
+        <div id="sync-status-drink" class="sync-status"></div>
+        <div class="list" id="drink-product-list"></div>
+        <button class="btn-save-visit" onclick="saveDrinkVisit()">Save Visit</button>
       </div>
     </div>
 
@@ -244,16 +263,29 @@ html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, 'SF P
 const CONFIG = {
   locations: [
     {
-      id: 'loc1', name: 'Location 1',
+      id: 'loc1', name: 'Ready Containment',
       machines: [
         {
-          id: 'machine1', name: 'Machine 1',
+          id: 'machine1', name: 'Snack Machine', type: 'snack',
           layout: [
             { row:'A', slots:[1,3,5] },
             { row:'B', slots:[1,3,4,6] },
             { row:'C', slots:[1,2,3,4,5,6] },
             { row:'D', slots:[1,2,3,4,5,6] },
             { row:'E', slots:[1,3,4,6] },
+          ]
+        },
+        {
+          id: 'machine2', name: 'Drink Machine', type: 'drink',
+          products: [
+            { id: 'aw',        name: 'A&W' },
+            { id: 'dr-pepper', name: 'Dr Pepper' },
+            { id: 'sunkist',   name: 'Sunkist' },
+            { id: 'sprite',    name: 'Sprite' },
+            { id: 'mtn-dew',   name: 'Mtn Dew' },
+            { id: 'coke',      name: 'Coke' },
+            { id: 'brisk-tea', name: 'Brisk Tea' },
+            { id: 'coke-zero', name: 'Coke Zero' },
           ]
         }
       ]
@@ -280,12 +312,14 @@ function persist() {
 }
 
 function setSyncStatus(state) {
-  const el = document.getElementById('sync-status');
-  if (!el) return;
-  el.className = 'sync-status' + (state ? ' ' + state : '');
   const msgs = { syncing: 'Syncing…', ok: 'Synced', error: 'Sync failed' };
-  el.textContent = msgs[state] || '';
-  if (state === 'ok') setTimeout(() => { if (el.className.includes('ok')) { el.textContent = ''; el.className = 'sync-status'; } }, 2000);
+  ['sync-status','sync-status-drink'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.className = 'sync-status' + (state ? ' ' + state : '');
+    el.textContent = msgs[state] || '';
+    if (state === 'ok') setTimeout(() => { if (el.className.includes('ok')) { el.textContent = ''; el.className = 'sync-status'; } }, 2000);
+  });
 }
 
 function checkSetup() {
@@ -394,8 +428,10 @@ function selectLocation(loc) {
   loc.machines.forEach(machine => {
     const btn = document.createElement('button');
     btn.className = 'list-item';
-    const slotCount = machine.layout.reduce((s,r)=>s+r.slots.length,0);
-    btn.innerHTML = `<div><div class="list-item-name">${machine.name}</div><div class="list-item-sub">${slotCount} slots</div></div><svg class="list-chevron" width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    const sub = machine.type==='drink'
+      ? `${machine.products.length} products`
+      : `${machine.layout.reduce((s,r)=>s+r.slots.length,0)} slots`;
+    btn.innerHTML = `<div><div class="list-item-name">${machine.name}</div><div class="list-item-sub">${sub}</div></div><svg class="list-chevron" width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
     btn.onclick = () => selectMachine(machine);
     el.appendChild(btn);
   });
@@ -404,9 +440,15 @@ function selectLocation(loc) {
 
 function selectMachine(machine) {
   currentMachine = machine;
-  document.getElementById('grid-title').textContent = machine.name;
-  renderGrid(machine);
-  showSub('screen-inventory','sub-grid');
+  if (machine.type === 'drink') {
+    document.getElementById('drink-title').textContent = machine.name;
+    renderDrinkScreen(machine);
+    showSub('screen-inventory','sub-drink');
+  } else {
+    document.getElementById('grid-title').textContent = machine.name;
+    renderGrid(machine);
+    showSub('screen-inventory','sub-grid');
+  }
 }
 
 function renderGrid(machine) {
@@ -479,6 +521,58 @@ function saveSlot() {
   renderGrid(currentMachine);
   closeSlotModal();
   pushToGitHub();
+}
+
+// DRINK MACHINE
+let drinkCounts = {};
+
+function renderDrinkScreen(machine) {
+  drinkCounts = {};
+  const el = document.getElementById('drink-product-list');
+  el.innerHTML = '';
+  el.style.cssText = 'display:flex;flex-direction:column;gap:8px;';
+  machine.products.forEach(p => {
+    drinkCounts[p.id] = 0;
+    const row = document.createElement('div');
+    row.className = 'drink-product-row';
+    row.innerHTML = `
+      <span class="drink-product-name">${p.name}</span>
+      <div class="stepper">
+        <button class="stepper-btn" onclick="adjustDrink('${p.id}',-1)">−</button>
+        <span class="stepper-count" id="dc-${p.id}">0</span>
+        <button class="stepper-btn" onclick="adjustDrink('${p.id}',1)">+</button>
+      </div>`;
+    el.appendChild(row);
+  });
+}
+
+function adjustDrink(productId, delta) {
+  drinkCounts[productId] = Math.max(0, (drinkCounts[productId] || 0) + delta);
+  const el = document.getElementById('dc-' + productId);
+  if (el) el.textContent = drinkCounts[productId];
+}
+
+function saveDrinkVisit() {
+  const machine = currentMachine;
+  let saved = false;
+  machine.products.forEach(p => {
+    const qty = drinkCounts[p.id] || 0;
+    if (qty > 0) {
+      visits.push({
+        slotKey: sdKey(currentLocation.id, machine.id, p.id),
+        locationId: currentLocation.id, machineId: machine.id,
+        locationName: currentLocation.name, machineName: machine.name,
+        slot: p.id, name: p.name, price: null,
+        sold: qty, revenue: 0, ts: Date.now()
+      });
+      saved = true;
+    }
+  });
+  if (saved) {
+    persist();
+    pushToGitHub();
+  }
+  renderDrinkScreen(machine);
 }
 
 // PERFORMANCE
