@@ -1,1 +1,1 @@
-{"slotData":{"loc1__machine1__B3":{"name":"","price":null,"before":25,"after":69},"loc1__machine1__C3":{"name":"","price":null,"before":null,"after":null}},"visits":[]}
+{"slotData":{"loc1__machine1__B3":{"name":"Doritos","price":null,"before":25,"after":69},"loc1__machine1__C3":{"name":"","price":null,"before":null,"after":null}},"visits":[{"slotKey":"loc1__machine1__B3","locationId":"loc1","machineId":"machine1","locationName":"Ready Containment","machineName":"Snack Machine","slot":"B3","name":"Doritos","price":null,"sold":0,"revenue":0,"ts":1781215459502}]}
