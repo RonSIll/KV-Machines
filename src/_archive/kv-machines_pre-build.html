@@ -5,16 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-<meta name="apple-mobile-web-app-title" content="KV Machines" />
-<title>KV Machines</title>
-<link rel="manifest" href='data:application/manifest+json,{"name":"KV Machines","short_name":"KV Machines","display":"standalone","background_color":"#ffffff","theme_color":"#33808f","start_url":"."}'>
+<meta name="apple-mobile-web-app-title" content="KellyVend" />
+<title>KellyVend</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 :root {
   --bg: #ffffff; --bg2: #f2f2f7; --bg3: #e5e5ea;
   --text: #000000; --text2: #6c6c70; --text3: #aeaeb2;
   --border: rgba(0,0,0,0.1); --border2: rgba(0,0,0,0.18);
-  --green: #33808f; --green-bg: #e3f0f2;
+  --green: #1a9e6e; --green-bg: #e8f8f2;
   --red: #d0342c; --red-bg: #fdecea;
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --safe-top: env(safe-area-inset-top, 0px);
@@ -32,26 +31,23 @@ html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, 'SF P
 .app { display: flex; flex-direction: column; height: 100dvh; max-width: 430px; margin: 0 auto; }
 .tab-bar { display: flex; border-top: 0.5px solid var(--border); background: var(--bg); padding: 8px 0; padding-bottom: calc(8px + var(--safe-bottom)); flex-shrink: 0; }
 .tab { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; padding: 4px 0; border: none; background: none; -webkit-user-select: none; }
-.tab-icon { display: block; color: var(--text3); }
+.tab-icon { font-size: 22px; color: var(--text3); }
 .tab-label { font-size: 10px; color: var(--text3); font-weight: 500; }
-.tab.active .tab-icon, .tab.active .tab-label { color: var(--green); }
+.tab.active .tab-icon, .tab.active .tab-label { color: var(--text); }
 .screens { flex: 1; overflow: hidden; position: relative; }
 .screen { position: absolute; inset: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; display: none; flex-direction: column; padding-top: calc(16px + var(--safe-top)); }
 .screen.active { display: flex; }
 .subscreen { display: none; flex-direction: column; flex: 1; padding: 0 14px 16px; }
 .subscreen.active { display: flex; }
 .screen-header { display: flex; align-items: center; gap: 10px; padding: 0 14px 16px; flex-shrink: 0; }
-.back-btn { background: none; border: none; color: var(--text); cursor: pointer; padding: 0; line-height: 1; display: flex; align-items: center; font-family: inherit; }
+.back-btn { background: none; border: none; font-size: 32px; color: var(--text); cursor: pointer; padding: 0; line-height: 1; display: flex; align-items: center; font-family: inherit; }
 .screen-title { font-size: 26px; font-weight: 700; color: var(--text); letter-spacing: -0.5px; flex: 1; }
-.sync-status { font-size: 11px; color: var(--text3); text-align: right; padding: 0 0 8px; min-height: 18px; flex-shrink: 0; }
-.sync-status.ok { color: var(--green); }
-.sync-status.error { color: var(--red); }
 .list { display: flex; flex-direction: column; gap: 8px; flex: 1; }
 .list-item { background: var(--bg2); border-radius: 14px; padding: 18px 16px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border: none; width: 100%; text-align: left; font-family: inherit; }
 .list-item:active { transform: scale(0.98); opacity: 0.8; }
 .list-item-name { font-size: 18px; font-weight: 600; color: var(--text); }
 .list-item-sub { font-size: 13px; color: var(--text2); margin-top: 2px; }
-.list-chevron { color: var(--text3); }
+.list-chevron { font-size: 22px; color: var(--text3); }
 .machine-grid { display: flex; flex-direction: column; gap: 8px; flex: 1; }
 .slot-row { display: flex; gap: 7px; flex: 1; }
 .slot-btn { flex: 1; min-width: 0; padding: 16px 4px; border-radius: 12px; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border: 2px solid var(--border2); background: var(--bg2); transition: transform 0.1s; -webkit-user-select: none; font-family: inherit; }
@@ -59,7 +55,7 @@ html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, 'SF P
 .slot-btn.filled { background: var(--text); border-color: var(--text); }
 .slot-code { font-size: 20px; font-weight: 700; color: var(--text); line-height: 1; }
 .slot-btn.filled .slot-code { color: var(--bg); }
-.slot-name { font-size: 11px; font-weight: 500; color: var(--text2); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; padding: 0 3px; }
+.slot-name { font-size: 10px; font-weight: 500; color: var(--text2); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; padding: 0 3px; }
 .slot-btn.filled .slot-name { color: rgba(255,255,255,0.6); }
 .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 300; align-items: flex-end; justify-content: center; }
 .overlay.open { display: flex; }
@@ -78,7 +74,7 @@ html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, 'SF P
 .sold-line strong { font-weight: 700; color: var(--text); }
 .modal-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .btn-cancel { padding: 16px; background: var(--bg2); border: none; border-radius: 14px; font-size: 17px; font-weight: 600; color: var(--text2); cursor: pointer; font-family: inherit; }
-.btn-save { padding: 16px; background: var(--green); border: none; border-radius: 14px; font-size: 17px; font-weight: 600; color: #ffffff; cursor: pointer; font-family: inherit; }
+.btn-save { padding: 16px; background: var(--text); border: none; border-radius: 14px; font-size: 17px; font-weight: 600; color: var(--bg); cursor: pointer; font-family: inherit; }
 .btn-save:active { opacity: 0.75; } .btn-cancel:active { opacity: 0.6; }
 .perf-highlights { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
 .highlight-card { border-radius: 14px; padding: 14px; }
@@ -107,15 +103,6 @@ html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, 'SF P
 .bar-fill { height: 100%; border-radius: 6px; background: var(--text3); }
 .bar-fill.highlight { background: var(--green); }
 .empty-state { text-align: center; color: var(--text3); font-size: 15px; padding: 48px 0; }
-.setup-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 400; align-items: center; justify-content: center; padding: 20px; }
-.setup-overlay.open { display: flex; }
-.setup-card { background: var(--bg); border-radius: 20px; width: 100%; max-width: 390px; padding: 28px 24px; }
-.setup-title { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 8px; letter-spacing: -0.4px; }
-.setup-sub { font-size: 14px; color: var(--text2); margin-bottom: 20px; line-height: 1.4; }
-.setup-input { width: 100%; padding: 14px; border: 2px solid var(--border2); border-radius: 12px; font-size: 14px; background: var(--bg); color: var(--text); font-family: inherit; appearance: none; -webkit-appearance: none; margin-bottom: 14px; }
-.setup-input:focus { outline: none; border-color: var(--text); }
-.btn-setup { width: 100%; padding: 16px; background: var(--green); border: none; border-radius: 14px; font-size: 17px; font-weight: 600; color: #ffffff; cursor: pointer; font-family: inherit; }
-.btn-setup:active { opacity: 0.75; }
 </style>
 </head>
 <body>
@@ -130,21 +117,16 @@ html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, 'SF P
       </div>
       <div class="subscreen" id="sub-machines">
         <div class="screen-header">
-          <button class="back-btn" onclick="goBack('sub-machines','sub-locations')">
-            <svg width="14" height="24" viewBox="0 0 14 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 22L2 12L12 2" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
+          <button class="back-btn" onclick="goBack('sub-machines','sub-locations')">‹</button>
           <div class="screen-title" id="machines-title">Machines</div>
         </div>
         <div class="list" id="machines-list"></div>
       </div>
       <div class="subscreen" id="sub-grid">
         <div class="screen-header">
-          <button class="back-btn" onclick="goBack('sub-grid','sub-machines')">
-            <svg width="14" height="24" viewBox="0 0 14 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 22L2 12L12 2" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
+          <button class="back-btn" onclick="goBack('sub-grid','sub-machines')">‹</button>
           <div class="screen-title" id="grid-title">Machine</div>
         </div>
-        <div id="sync-status" class="sync-status"></div>
         <div class="machine-grid" id="machine-grid"></div>
       </div>
     </div>
@@ -159,9 +141,7 @@ html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, 'SF P
       </div>
       <div class="subscreen" id="sub-perf-detail">
         <div class="screen-header">
-          <button class="back-btn" onclick="goBack('sub-perf-detail','sub-perf-list')">
-            <svg width="14" height="24" viewBox="0 0 14 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 22L2 12L12 2" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
+          <button class="back-btn" onclick="goBack('sub-perf-detail','sub-perf-list')">‹</button>
           <div class="screen-title" id="detail-title">Product</div>
         </div>
         <div class="product-detail" id="product-detail"></div>
@@ -171,33 +151,12 @@ html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, 'SF P
   </div>
   <nav class="tab-bar">
     <button class="tab active" id="tab-inventory" onclick="switchTab('inventory')">
-      <svg class="tab-icon" width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="2" y="2" width="7" height="7" rx="1.5" fill="currentColor"/>
-        <rect x="13" y="2" width="7" height="7" rx="1.5" fill="currentColor"/>
-        <rect x="2" y="13" width="7" height="7" rx="1.5" fill="currentColor"/>
-        <rect x="13" y="13" width="7" height="7" rx="1.5" fill="currentColor"/>
-      </svg>
-      <div class="tab-label">Inventory</div>
+      <div class="tab-icon">⊞</div><div class="tab-label">Inventory</div>
     </button>
     <button class="tab" id="tab-performance" onclick="switchTab('performance')">
-      <svg class="tab-icon" width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="2" y="13" width="4" height="7" rx="1.5" fill="currentColor"/>
-        <rect x="9" y="8" width="4" height="12" rx="1.5" fill="currentColor"/>
-        <rect x="16" y="3" width="4" height="17" rx="1.5" fill="currentColor"/>
-      </svg>
-      <div class="tab-label">Performance</div>
+      <div class="tab-icon">◎</div><div class="tab-label">Performance</div>
     </button>
   </nav>
-</div>
-
-<!-- SETUP MODAL (first run — stores PAT in localStorage) -->
-<div class="setup-overlay" id="setup-overlay">
-  <div class="setup-card">
-    <div class="setup-title">Connect to GitHub</div>
-    <div class="setup-sub">Paste your GitHub personal access token to enable inventory sync. Stored only on this device.</div>
-    <input type="password" id="setup-pat" class="setup-input" placeholder="github_pat_…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" />
-    <button class="btn-setup" onclick="savePAT()">Save Token</button>
-  </div>
 </div>
 
 <!-- SLOT MODAL -->
@@ -231,16 +190,6 @@ html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, 'SF P
 </div>
 
 <script>
-// CONFIG — edit this block to set up your locations, machines, and slot layouts.
-// locations: array of stops Ron services
-//   id: unique string key — used in saved data; do NOT change once data exists for this location
-//   name: display name shown in the app
-//   machines: array of machines at this location
-//     id: unique string key — do NOT change once data exists for this machine
-//     name: display name
-//     layout: array of rows, each with a letter and an array of slot numbers
-//       row: single letter (A, B, C…)
-//       slots: slot numbers present in that row — NOT necessarily sequential
 const CONFIG = {
   locations: [
     {
@@ -261,13 +210,8 @@ const CONFIG = {
   ]
 };
 
-// GitHub sync — PAT stored in localStorage (set on first run via setup prompt)
-const GITHUB = { owner: 'RonSill', repo: 'KV-Machines', path: 'inventory.json' };
-function getPAT() { return localStorage.getItem('kv-pat') || ''; }
-
 let slotData = {}, visits = [];
 let currentLocation = null, currentMachine = null, currentSlotKey = null, currentSlotCode = null;
-let githubSha = null;
 
 function sdKey(locId, machId, slot) { return locId+'__'+machId+'__'+slot; }
 function loadData() {
@@ -277,82 +221,6 @@ function loadData() {
 function persist() {
   try { localStorage.setItem('kv2-slots', JSON.stringify(slotData)); } catch(e){}
   try { localStorage.setItem('kv2-visits', JSON.stringify(visits)); } catch(e){}
-}
-
-function setSyncStatus(state) {
-  const el = document.getElementById('sync-status');
-  if (!el) return;
-  el.className = 'sync-status' + (state ? ' ' + state : '');
-  const msgs = { syncing: 'Syncing…', ok: 'Synced', error: 'Sync failed' };
-  el.textContent = msgs[state] || '';
-  if (state === 'ok') setTimeout(() => { if (el.className.includes('ok')) { el.textContent = ''; el.className = 'sync-status'; } }, 2000);
-}
-
-function checkSetup() {
-  if (!getPAT()) { document.getElementById('setup-overlay').classList.add('open'); }
-  else { pullFromGitHub(); }
-}
-
-function savePAT() {
-  const pat = document.getElementById('setup-pat').value.trim();
-  if (!pat) return;
-  localStorage.setItem('kv-pat', pat);
-  document.getElementById('setup-overlay').classList.remove('open');
-  pullFromGitHub();
-}
-
-async function pullFromGitHub() {
-  setSyncStatus('syncing');
-  try {
-    const res = await fetch(
-      `https://api.github.com/repos/${GITHUB.owner}/${GITHUB.repo}/contents/${GITHUB.path}`,
-      { headers: { Authorization: `token ${getPAT()}`, Accept: 'application/vnd.github.v3+json' } }
-    );
-    if (res.ok) {
-      const data = await res.json();
-      const payload = JSON.parse(atob(data.content.replace(/\s/g, '')));
-      if (payload.slotData) slotData = payload.slotData;
-      if (payload.visits) visits = payload.visits;
-      githubSha = data.sha;
-      persist();
-      setSyncStatus('ok');
-      renderLocations();
-      if (currentMachine) renderGrid(currentMachine);
-    } else if (res.status === 404) {
-      setSyncStatus('ok');
-    } else {
-      setSyncStatus('error');
-    }
-  } catch(e) {
-    setSyncStatus('error');
-  }
-}
-
-async function pushToGitHub() {
-  if (!getPAT()) return;
-  setSyncStatus('syncing');
-  try {
-    const content = btoa(unescape(encodeURIComponent(JSON.stringify({ slotData, visits }))));
-    const body = { message: 'sync inventory', content };
-    if (githubSha) body.sha = githubSha;
-    const res = await fetch(
-      `https://api.github.com/repos/${GITHUB.owner}/${GITHUB.repo}/contents/${GITHUB.path}`,
-      {
-        method: 'PUT',
-        headers: { Authorization: `token ${getPAT()}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-      }
-    );
-    if (res.ok) {
-      const data = await res.json();
-      githubSha = data.content.sha;
-      setSyncStatus('ok');
-    } else {
-      setSyncStatus('error');
-    }
-  } catch(e) {
-    setSyncStatus('error');
-  }
 }
 
 function switchTab(tab) {
@@ -380,7 +248,7 @@ function renderLocations() {
   CONFIG.locations.forEach(loc => {
     const btn = document.createElement('button');
     btn.className = 'list-item';
-    btn.innerHTML = `<div><div class="list-item-name">${loc.name}</div><div class="list-item-sub">${loc.machines.length} machine${loc.machines.length!==1?'s':''}</div></div><svg class="list-chevron" width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    btn.innerHTML = `<div><div class="list-item-name">${loc.name}</div><div class="list-item-sub">${loc.machines.length} machine${loc.machines.length!==1?'s':''}</div></div><div class="list-chevron">›</div>`;
     btn.onclick = () => selectLocation(loc);
     el.appendChild(btn);
   });
@@ -395,7 +263,7 @@ function selectLocation(loc) {
     const btn = document.createElement('button');
     btn.className = 'list-item';
     const slotCount = machine.layout.reduce((s,r)=>s+r.slots.length,0);
-    btn.innerHTML = `<div><div class="list-item-name">${machine.name}</div><div class="list-item-sub">${slotCount} slots</div></div><svg class="list-chevron" width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    btn.innerHTML = `<div><div class="list-item-name">${machine.name}</div><div class="list-item-sub">${slotCount} slots</div></div><div class="list-chevron">›</div>`;
     btn.onclick = () => selectMachine(machine);
     el.appendChild(btn);
   });
@@ -478,7 +346,6 @@ function saveSlot() {
   persist();
   renderGrid(currentMachine);
   closeSlotModal();
-  pushToGitHub();
 }
 
 // PERFORMANCE
@@ -504,15 +371,12 @@ function renderPerformance() {
   if(products.length>=2) {
     const top=products[0], bot=products[products.length-1];
     hEl.innerHTML = `
-      <div class="highlight-card top"><div class="highlight-badge">Top Seller</div><div class="highlight-name">${top.name}</div><div class="highlight-stat">${top.totalSold} sold · $${top.totalRevenue.toFixed(2)}</div></div>
-      <div class="highlight-card bottom"><div class="highlight-badge">Lowest</div><div class="highlight-name">${bot.name}</div><div class="highlight-stat">${bot.totalSold} sold · $${bot.totalRevenue.toFixed(2)}</div></div>`;
+      <div class="highlight-card top"><div class="highlight-badge">🏆 Top</div><div class="highlight-name">${top.name}</div><div class="highlight-stat">${top.totalSold} sold · $${top.totalRevenue.toFixed(2)}</div></div>
+      <div class="highlight-card bottom"><div class="highlight-badge">⚠️ Lowest</div><div class="highlight-name">${bot.name}</div><div class="highlight-stat">${bot.totalSold} sold · $${bot.totalRevenue.toFixed(2)}</div></div>`;
   } else { hEl.innerHTML=''; }
 
   const pEl = document.getElementById('product-list');
-  if(!products.length) {
-    pEl.innerHTML=`<div class="empty-state"><svg width="40" height="40" viewBox="0 0 22 22" fill="none" style="display:block;margin:0 auto 12px;color:var(--text3)"><rect x="2" y="13" width="4" height="7" rx="1.5" fill="currentColor"/><rect x="9" y="8" width="4" height="12" rx="1.5" fill="currentColor"/><rect x="16" y="3" width="4" height="17" rx="1.5" fill="currentColor"/></svg>Log some visits to see performance.</div>`;
-    return;
-  }
+  if(!products.length) { pEl.innerHTML='<div class="empty-state">Log some visits to see performance.</div>'; return; }
   pEl.innerHTML='';
   products.forEach(p => {
     const btn = document.createElement('button');
@@ -532,6 +396,7 @@ function showProductDetail(product, allProducts) {
 
   let html = '';
 
+  // By machine
   html += `<div class="detail-section"><div class="detail-section-title">This Product — By Machine</div>`;
   machineEntries.forEach(([mName,data])=>{
     const pct=Math.round((data.sold/maxMachine)*100);
@@ -539,6 +404,7 @@ function showProductDetail(product, allProducts) {
   });
   html += `</div>`;
 
+  // vs All products globally
   html += `<div class="detail-section"><div class="detail-section-title">vs All Products (Global)</div>`;
   allProducts.forEach(p=>{
     const pct=Math.round((p.totalSold/maxGlobal)*100);
@@ -553,7 +419,6 @@ function showProductDetail(product, allProducts) {
 
 loadData();
 renderLocations();
-checkSetup();
 </script>
 </body>
 </html>
