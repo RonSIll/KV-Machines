@@ -3,8 +3,9 @@
 Mobile-first iPhone PWA for KellyVend LLC vending machine restocking and inventory tracking.
 
 ## next_actions
-- Finn: execute WO 2026-06-11-02 (build pass) — branding, SVG icons per Tuxx's spec, PWA manifest, GitHub sync, config cleanup
-- Hans: review Finn's output, verify against WO-02 definition of done, then /sss and push
+- Ron: update CONFIG in `src/kv-machines.html` with real location names, machine names, and slot layouts when ready
+- Ron: if app is reinstalled or localStorage is cleared, re-enter PAT via the setup prompt (PAT in `instructions/work_orders.json`)
+- Hans: mark WO 2026-06-11-02 complete in work_orders.json (build shipped and verified on device)
 
 ## Summary
 Ron visits vending machines, counts inventory before and after restocking, and tracks what sold. The app is a single `kv-machines.html` file hosted on GitHub Pages and installed on iPhone Home Screen as a PWA.
