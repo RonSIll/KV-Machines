@@ -3,8 +3,9 @@
 Mobile-first iPhone PWA + PC dashboard for KellyVend LLC vending machine restocking and inventory tracking. Single `kv-machines.html` file — iPhone and PC views in one app.
 
 ## next_actions
-- Tuxx: design PC view (WO-05) — layout, admin panels, analytics, product/price assignment UI
-- Finn: after WO-05 approved — migrate CONFIG to config.json and build PC view (WO-06)
+- Ron: review and approve `guidance/pc-view-design-spec.md` (WO-05 Tuxx design) — approval gates WO-06
+- Hans: on Ron's approval, release WO-06 to Finn
+- Finn: after WO-06 released — migrate CONFIG to config.json and build PC view (WO-06)
 - Ron: update CONFIG / config.json with real location names, machine names, and slot layouts when ready
 - Ron: if app is reinstalled or localStorage is cleared, re-enter PAT via the setup prompt (PAT in `instructions/work_orders.json`)
 
